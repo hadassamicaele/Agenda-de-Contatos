@@ -1,4 +1,4 @@
-            package br.edu.principal;
+package br.edu.principal;
 
 import java.util.List;
 import java.util.Scanner;
