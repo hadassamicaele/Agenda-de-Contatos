@@ -1,146 +1,93 @@
 package br.edu.principal;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Agenda {
+public class Principal {
 	
-	public static void adicionar(Scanner sc, List<Contato> contatos) {
-    	
-		System.out.println("=== ADICIONAR CONTATO ===");
+	public static void main(String[] args) {
+		
+		//Testes
+		Contato contato1 = new Contato();
+		contato1.nome = "Arthur Dent";
+		contato1.celular = "4242-4242";
+		contato1.email = "arthur@galaxy.com";
+			
+		
+		Contato contato2 = new Contato();
+		contato2.nome = "Ford Prefect";
+		contato2.celular = "1234-5678";
+		contato2.email = "ford@galaxy.com";
+			
+		
+		Contato contato3 = new Contato();
+		contato3.nome = "Trillian";
+		contato3.celular = "9876-5432";
+		contato3.email = "trillian@galaxy.com";
+
+				
+		List<Contato> contatos = new ArrayList<>();
+		contatos.add(contato1);
+		contatos.add(contato2);
+		contatos.add(contato3);
+		
+		for (Contato contato : contatos) {
+		    System.out.println("Nome: " + contato.nome);
+		    System.out.println("Celular: " + contato.celular);
+		    System.out.println("E-mail: " + contato.email);
+		    System.out.println("-------------------------");
+		}
+		
+		for (int i = 0; i < contatos.size(); i++) {
+
+		    Contato contato = contatos.get(i);
+
+		    System.out.println("Contato " + i);
+		    System.out.println("Nome: " + contato.nome);
+		    System.out.println("Celular: " + contato.celular);
+		    System.out.println("E-mail: " + contato.email);
+		}
+		
+		Contato contato = contatos.get(0);
+		System.out.println(contato.nome);
+		System.out.println(contato.celular);
+		System.out.println(contato.email);
+		
+		System.out.println(contatos.get(0).nome);
+		
+
+		//Versão V2
+        List<String> nomes = new ArrayList<>();
+        List<String> celulares = new ArrayList<>();
+        List<String> emails = new ArrayList<>();
+        Persistencia.carregarContatos(nomes, celulares, emails);
         
-		System.out.print("Digite o nome: ");
-        String nome = sc.nextLine();
+        int opcao;
+        boolean continuar = true;
         
-        System.out.print("Digite o celular: ");
-        String celular = sc.nextLine();
+        Scanner sc = new Scanner(System.in);
         
-        System.out.print("Digite o email: ");
-        String email = sc.nextLine();
+        Uteis.mostraInicializacao(); 
 
-        Contato contato = new Contato();
+        while (continuar) {
+        	Uteis.mostraMenu();
+            opcao = Uteis.selecionaOpcao(sc);
 
-        contato.nome = nome;
-        contato.celular = celular;
-        contato.email = email;
-
-        contatos.add(contato);
-
-
-        System.out.println("Contato adicionado com sucesso!");
-    }
-	
-	public static void listar(List<Contato> contatos) {
-    	
-		System.out.println("=== LISTAR CONTATOS ===");
-       
-		if (contatos.isEmpty()) {
-            System.out.println("Nenhum contato cadastrado!");
-
-        } else {
-            
-        	for (Contato contato : contatos) {
-
-                System.out.println("--------------------------");
-                System.out.println("Nome: " + contato.nome);
-                System.out.println("Celular: " + contato.celular);
-                System.out.println("Email: " + contato.email);
+            switch (opcao) {
+                case 1-> Agenda.adicionar(sc, nomes, celulares, emails);           	
+                case 2-> Agenda.listar(nomes, celulares, emails);
+                case 3-> Agenda.pesquisar(sc, nomes, celulares, emails);
+                case 4-> Agenda.atualizar(sc, nomes, celulares, emails);           	
+                case 5-> Agenda.excluir(sc, nomes, celulares, emails);          	
+                case 6-> {
+                	Persistencia.salvarContatos(nomes, celulares, emails);
+                	continuar = Uteis.sair();
+                }
+                case 7-> Uteis.sobre();
+                default -> System.out.println("Opção inválida!");
             }
         }
-    }
-
-    public static void pesquisar(Scanner sc, List<Contato> contatos) {
-    	
-    	System.out.println("=== PROCURAR CONTATO ===");
-        
-    	System.out.print("Digite o nome do contato: ");
-        String nomeBusca = sc.nextLine();
-
-        boolean encontrado = false;
-
-        for (Contato contato : contatos) {
-
-            if (contato.nome.equalsIgnoreCase(nomeBusca)) {
-
-                System.out.println("--------------------------");
-                System.out.println("Nome: " + contato.nome);
-                System.out.println("Celular: " + contato.celular);
-                System.out.println("Email: " + contato.email);
-
-                encontrado = true;
-            }
-        }
-
-        if (!encontrado) {
-            System.out.println("Contato não encontrado!");
-        }
-    }
-
-    public static void atualizar(Scanner sc, List<Contato> contatos) {
-    	
-    	System.out.println("=== ALTERAR CONTATO ===");
-        
-    	System.out.print("Digite o nome do contato: ");
-        String nomeProcurado = sc.nextLine();
-
-        Contato contatoEncontrado = null;
-
-        for (Contato contato : contatos) {
-
-            if (contato.nome.equalsIgnoreCase(nomeProcurado)) {
-                contatoEncontrado = contato;
-            }
-        }
-
-        if (contatoEncontrado != null) {
-
-            System.out.print("Digite o novo nome: ");
-            String novoNome = sc.nextLine();
-
-            System.out.print("Digite o novo celular: ");
-            String novoCelular = sc.nextLine();
-
-            System.out.print("Digite o novo email: ");
-            String novoEmail = sc.nextLine();
-
-            contatoEncontrado.nome = novoNome;
-            contatoEncontrado.celular = novoCelular;
-            contatoEncontrado.email = novoEmail;
-
-            System.out.println("Contato alterado com sucesso!");
-        } else {
-            System.out.println("Contato não encontrado!");
-        }
-    }
-
-    public static void excluir(Scanner sc, List<Contato> contatos) {
-    	
-    	System.out.println("=== EXCLUIR CONTATO ===");
-        
-    	System.out.print("Digite o nome do contato: ");
-        String nomeExcluir = sc.nextLine();
-
-        boolean excluido = false;
-        Contato contatoExcluir = null;
-
-        for (Contato contato : contatos) {
-
-            if (contato.nome.equalsIgnoreCase(nomeExcluir)) {
-                contatoExcluir = contato;
-            }
-        }
-
-        if (contatoExcluir != null) {
-
-            contatos.remove(contatoExcluir);
-
-            System.out.println("Contato excluído com sucesso!");
-
-        } else {
-
-            System.out.println("Contato não encontrado!");
-        }
-
-    }
-    
+        sc.close();
+    }	
 }

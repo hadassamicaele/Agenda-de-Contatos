@@ -10,16 +10,15 @@ public class Principal {
 
 		List<Contato> contatos = new ArrayList<>();
 
-        Persistência.carregarContatos(contatos);
+        Persistencia.carregarContatos(contatos);
         
         int opcao;
-        boolean continuar = true;
         
         Scanner sc = new Scanner(System.in);
         
         Uteis.mostraInicializacao(); 
 
-        while (continuar) {
+        while (true) {
         	Uteis.mostraMenu();
             opcao = Uteis.selecionaOpcao(sc);
 
@@ -30,13 +29,14 @@ public class Principal {
                 case 4-> Agenda.atualizar(sc, contatos);           	
                 case 5-> Agenda.excluir(sc, contatos);          	
                 case 6-> {
-                	Persistência.salvarContatos(contatos);
-                	continuar = Uteis.sair();
+                	Persistencia.salvarContatos(contatos);
+                	Uteis.sair();
+                	sc.close();
+                	return;
                 }
                 case 7-> Uteis.sobre();
-                default -> System.out.println("Opção inválida!");
+                default -> System.out.println("Opção Inválida!");
             }
         }
-        sc.close();
     }	
 }
